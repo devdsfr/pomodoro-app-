@@ -1,0 +1,94 @@
+<div class="pomodoro-timer">
+  <div class="timer-container">
+    <div class="timer-display">
+      <div class="time-circle">
+        <svg class="progress-ring" width="200" height="200">
+          <circle
+            class="progress-ring-background"
+            stroke="#e6e6e6"
+            stroke-width="8"
+            fill="transparent"
+            r="90"
+            cx="100"
+            cy="100"/>
+          <circle
+            class="progress-ring-progress"
+            [attr.stroke]="isWorkTime ? '#ff6b6b' : '#4ecdc4'"
+            stroke-width="8"
+            fill="transparent"
+            r="90"
+            cx="100"
+            cy="100"
+            [style.stroke-dasharray]="565.48"
+            [style.stroke-dashoffset]="565.48 - (565.48 * getProgressPercentage() / 100)"/>
+        </svg>
+        <div class="time-text">
+          <div class="time">{{ formatTime(timeLeft) }}</div>
+          <div class="session-type">{{ isWorkTime ? 'Trabalho' : 'Descanso' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-selection" *ngIf="!selectedTask">
+      <h3>Selecione uma tarefa:</h3>
+      <div class="task-list">
+        <div 
+          class="task-item" 
+          *ngFor="let task of tasks"
+          (click)="selectTask(task)">
+          <span class="task-title">{{ task.titulo }}</span>
+          <span class="task-description" *ngIf="task.descricao">{{ task.descricao }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="selected-task" *ngIf="selectedTask">
+      <h3>Tarefa Selecionada:</h3>
+      <div class="task-info">
+        <span class="task-title">{{ selectedTask.titulo }}</span>
+        <button class="change-task-btn" (click)="selectedTask = null">Trocar</button>
+      </div>
+    </div>
+
+    <div class="timer-controls">
+      <button 
+        class="control-btn start-btn" 
+        (click)="startTimer()" 
+        [disabled]="isRunning || !selectedTask">
+        Iniciar
+      </button>
+      <button 
+        class="control-btn pause-btn" 
+        (click)="pauseTimer()" 
+        [disabled]="!isRunning">
+        Pausar
+      </button>
+      <button 
+        class="control-btn reset-btn" 
+        (click)="resetTimer()">
+        Resetar
+      </button>
+    </div>
+
+    <div class="timer-settings">
+      <div class="setting">
+        <label>Trabalho (min):</label>
+        <input 
+          type="number" 
+          [(ngModel)]="workDuration" 
+          min="1" 
+          max="60"
+          [disabled]="isRunning">
+      </div>
+      <div class="setting">
+        <label>Descanso (min):</label>
+        <input 
+          type="number" 
+          [(ngModel)]="breakDuration" 
+          min="1" 
+          max="30"
+          [disabled]="isRunning">
+      </div>
+    </div>
+  </div>
+</div>

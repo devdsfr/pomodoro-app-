@@ -1,0 +1,129 @@
+<div class="calendar-container">
+  <div class="calendar-header">
+    <h2>Calendário de Pomodoros</h2>
+    <div class="month-stats">
+      <div class="stat">
+        <span class="stat-value">{{ getTotalPomodorosThisMonth() }}</span>
+        <span class="stat-label">Pomodoros este mês</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ formatTime(getTotalWorkTimeThisMonth()) }}</span>
+        <span class="stat-label">Tempo de trabalho</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="calendar-navigation">
+    <button class="nav-btn" (click)="previousMonth()">‹</button>
+    <h3 class="current-month">{{ getCurrentMonthYear() }}</h3>
+    <button class="nav-btn" (click)="nextMonth()">›</button>
+  </div>
+
+  <div class="calendar-grid">
+    <!-- Cabeçalho dos dias da semana -->
+    <div class="weekday-header" *ngFor="let day of weekDays">
+      {{ day }}
+    </div>
+
+    <!-- Dias do calendário -->
+    <div 
+      class="calendar-day"
+      *ngFor="let day of calendarDays"
+      [class.other-month]="!day.isCurrentMonth"
+      [class.today]="day.isToday"
+      [class.has-pomodoros]="day.stats && day.stats.total_pomodoros > 0"
+      [class.intensity-low]="getPomodoroIntensity(day.stats) === 'low'"
+      [class.intensity-medium]="getPomodoroIntensity(day.stats) === 'medium'"
+      [class.intensity-high]="getPomodoroIntensity(day.stats) === 'high'"
+      [class.intensity-very-high]="getPomodoroIntensity(day.stats) === 'very-high'"
+      (click)="selectDay(day)">
+      
+      <div class="day-number">{{ day.date.getDate() }}</div>
+      
+      <div class="day-stats" *ngIf="day.stats && day.stats.total_pomodoros > 0">
+        <div class="pomodoro-count">{{ day.stats.total_pomodoros }}</div>
+        <div class="pomodoro-dots">
+          <span 
+            class="dot" 
+            *ngFor="let i of getDotsArray(day.stats?.total_pomodoros || 0)">
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legenda -->
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-color intensity-none"></div>
+      <span>Nenhum</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color intensity-low"></div>
+      <span>1-2</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color intensity-medium"></div>
+      <span>3-4</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color intensity-high"></div>
+      <span>5-6</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color intensity-very-high"></div>
+      <span>7+</span>
+    </div>
+  </div>
+
+  <!-- Modal de detalhes do dia -->
+  <div class="modal-overlay" *ngIf="selectedDay" (click)="closeDetails()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ selectedDay.date | date:'dd/MM/yyyy' }}</h3>
+        <button class="close-btn" (click)="closeDetails()">×</button>
+      </div>
+      
+      <div class="modal-body">
+        <div *ngIf="selectedDay.stats; else noStats">
+          <div class="detail-stat">
+            <span class="detail-label">Pomodoros Completados:</span>
+            <span class="detail-value">{{ selectedDay.stats.total_pomodoros }}</span>
+          </div>
+          
+          <div class="detail-stat">
+            <span class="detail-label">Tempo de Trabalho:</span>
+            <span class="detail-value">{{ formatTime(selectedDay.stats.tempo_total_trabalho) }}</span>
+          </div>
+          
+          <div class="detail-stat">
+            <span class="detail-label">Tempo de Descanso:</span>
+            <span class="detail-value">{{ formatTime(selectedDay.stats.tempo_total_descanso) }}</span>
+          </div>
+          
+          <div class="productivity-indicator">
+            <div class="productivity-bar">
+              <div 
+                class="productivity-fill"
+                [style.width.%]="(selectedDay.stats.total_pomodoros / 8) * 100"
+                [class.excellent]="selectedDay.stats.total_pomodoros >= 6"
+                [class.good]="selectedDay.stats.total_pomodoros >= 4 && selectedDay.stats.total_pomodoros < 6"
+                [class.fair]="selectedDay.stats.total_pomodoros >= 2 && selectedDay.stats.total_pomodoros < 4"
+                [class.low]="selectedDay.stats.total_pomodoros < 2">
+              </div>
+            </div>
+            <span class="productivity-label">
+              {{ selectedDay.stats.total_pomodoros >= 6 ? 'Excelente' : 
+                 selectedDay.stats.total_pomodoros >= 4 ? 'Bom' :
+                 selectedDay.stats.total_pomodoros >= 2 ? 'Regular' : 'Baixo' }} produtividade
+            </span>
+          </div>
+        </div>
+        
+        <ng-template #noStats>
+          <p class="no-stats">Nenhum pomodoro registrado neste dia.</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

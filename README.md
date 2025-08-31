@@ -1,305 +1,36 @@
-# pomodoro-app-
-Uma aplicação completa de gerenciamento de Pomodoro desenvolvida com Go (backend) e Angular (frontend).
+# Projeto Pomodoro App
 
-🚀 Funcionalidades
+Este projeto consiste em um aplicativo Pomodoro com gerenciamento de tarefas e acompanhamento de estatísticas, desenvolvido com Go (backend) e Angular (frontend).
 
-⏱️ Timer Pomodoro
+## Modelo de Dados
 
-•
-Timer configurável para trabalho e descanso
+### Tarefa
+- `ID` (string): Identificador único da tarefa.
+- `Titulo` (string): Título da tarefa.
+- `Descricao` (string): Descrição detalhada da tarefa (opcional).
+- `Concluida` (boolean): Indica se a tarefa foi concluída.
+- `DataCriacao` (timestamp): Data e hora de criação da tarefa.
 
-•
-Interface visual atrativa com círculo de progresso
+### Pomodoro
+- `ID` (string): Identificador único do pomodoro.
+- `TarefaID` (string): ID da tarefa associada a este pomodoro.
+- `DuracaoTrabalho` (int): Duração do período de trabalho em minutos.
+- `DuracaoDescanso` (int): Duração do período de descanso em minutos.
+- `DataInicio` (timestamp): Data e hora de início do pomodoro.
+- `DataFim` (timestamp): Data e hora de fim do pomodoro.
 
-•
-Controles de iniciar, pausar e resetar
+## APIs REST (Backend Go)
 
-•
-Configuração personalizada de tempos
+### Tarefas
+- `GET /api/tasks`: Retorna todas as tarefas.
+- `GET /api/tasks/{id}`: Retorna uma tarefa específica por ID.
+- `POST /api/tasks`: Cria uma nova tarefa.
+- `PUT /api/tasks/{id}`: Atualiza uma tarefa existente.
+- `DELETE /api/tasks/{id}`: Exclui uma tarefa.
 
-📋 Gerenciamento de Tarefas
+### Pomodoros
+- `POST /api/pomodoros`: Registra um novo pomodoro.
+- `GET /api/pomodoros/daily`: Retorna o número de pomodoros e tempo total de trabalho/descanso por dia.
+- `GET /api/pomodoros/task/{taskId}`: Retorna todos os pomodoros associados a uma tarefa específica.
 
-•
-Criar, editar e excluir tarefas
 
-•
-Marcar tarefas como concluídas
-
-•
-Interface intuitiva para organização
-
-📅 Calendário de Produtividade
-
-•
-Visualização mensal dos pomodoros realizados
-
-•
-Estatísticas diárias de tempo de trabalho e descanso
-
-•
-Indicadores visuais de intensidade de produtividade
-
-•
-Detalhes por dia com métricas completas
-
-🛠️ Tecnologias Utilizadas
-
-Backend (Go)
-
-•
-Gin Framework - Framework web rápido e minimalista
-
-•
-GORM - ORM para Go
-
-•
-SQLite - Banco de dados leve
-
-•
-CORS - Suporte a requisições cross-origin
-
-Frontend (Angular)
-
-•
-Angular 18 - Framework frontend moderno
-
-•
-TypeScript - Linguagem tipada
-
-•
-CSS3 - Estilização avançada com gradientes e animações
-
-•
-Responsive Design - Interface adaptável para mobile e desktop
-
-📁 Estrutura do Projeto
-
-pomodoro-app/
-├── backend/
-│   ├── main.go              # Servidor principal e rotas
-│   ├── models.go            # Modelos de dados
-│   ├── go.mod               # Dependências Go
-│   └── static/              # Arquivos do frontend compilado
-└── frontend/
-├── src/
-│   ├── app/
-│   │   ├── components/    # Componentes Angular
-│   │   ├── services/      # Serviços de API
-│   │   └── app.*          # Componente principal
-│   └── main.ts           # Bootstrap da aplicação
-├── angular.json          # Configuração Angular
-└── package.json          # Dependências Node.js
-
-🔧 Como Executar
-
-Pré-requisitos
-
-•
-Go 1.21+
-
-•
-Node.js 20+
-
-•
-Angular CLI
-
-Backend
-
-cd backend
-go mod tidy
-CGO_ENABLED=1 go run .
-
-Frontend (Desenvolvimento)
-
-cd frontend
-npm install
-ng serve
-
-Build de Produção
-
-cd frontend
-ng build --configuration production
-cp -r dist/pomodoro-frontend/* ../backend/static/
-
-cp -r dist/pomodoro-frontend/* ../backend/static/
-
-
-🌐 API Endpoints
-
-Tarefas
-
-•
-GET /api/tasks - Listar todas as tarefas
-
-•
-GET /api/tasks/:id - Obter tarefa específica
-
-•
-POST /api/tasks - Criar nova tarefa
-
-•
-PUT /api/tasks/:id - Atualizar tarefa
-
-•
-DELETE /api/tasks/:id - Excluir tarefa
-
-Pomodoros
-
-•
-POST /api/pomodoros - Registrar pomodoro completado
-
-•
-GET /api/pomodoros/daily - Estatísticas diárias
-
-•
-GET /api/pomodoros/task/:taskId - Pomodoros por tarefa
-
-🎨 Design e UX
-
-Características do Design
-
-•
-Gradientes modernos - Visual atrativo com cores suaves
-
-•
-Animações fluidas - Transições suaves entre estados
-
-•
-Responsivo - Funciona perfeitamente em mobile e desktop
-
-•
-Acessibilidade - Controles claros e navegação intuitiva
-
-Paleta de Cores
-
-•
-Primária: Gradiente roxo-azul (#667eea → #764ba2)
-
-•
-Secundária: Verde para ações positivas
-
-•
-Neutros: Cinzas para textos e backgrounds
-
-•
-Indicadores: Cores diferenciadas para níveis de produtividade
-
-📊 Funcionalidades Avançadas
-
-Calendário Inteligente
-
-•
-Visualização por intensidade: Cores diferentes baseadas no número de pomodoros
-
-•
-Estatísticas mensais: Total de pomodoros e tempo trabalhado
-
-•
-Detalhes por dia: Modal com informações completas
-
-•
-Navegação temporal: Navegar entre meses
-
-Timer Avançado
-
-•
-Estados visuais: Diferentes cores para trabalho e descanso
-
-•
-Progresso circular: Indicador visual do tempo restante
-
-•
-Configuração flexível: Tempos personalizáveis
-
-•
-Integração com tarefas: Seleção de tarefa para o pomodoro
-
-🔒 Segurança e Performance
-
-•
-CORS configurado para requisições seguras
-
-•
-Validação de dados no backend
-
-•
-Build otimizado para produção
-
-•
-Lazy loading de componentes
-
-•
-Compressão de assets
-
-🚀 Deploy
-
-A aplicação está configurada para deploy fácil:
-
-•
-Backend serve os arquivos estáticos do frontend
-
-•
-Fallback para SPA (Single Page Application)
-
-•
-Configuração de CORS para desenvolvimento e produção
-
-📝 Próximas Melhorias
-
-
-
-
-Notificações push quando o timer termina
-
-
-
-
-Relatórios semanais e mensais
-
-
-
-
-Integração com calendários externos
-
-
-
-
-Temas personalizáveis
-
-
-
-
-Sincronização em nuvem
-
-
-
-
-Aplicativo mobile nativo
-
-👨‍💻 Desenvolvimento
-
-Desenvolvido com foco em:
-
-•
-Clean Code - Código limpo e bem estruturado
-
-•
-Arquitetura modular - Componentes reutilizáveis
-
-•
-Performance - Otimizações para velocidade
-
-•
-Experiência do usuário - Interface intuitiva e responsiva
-
-
-
-
-Aplicação disponível em: https://8080-iebwaxm96jd6sqy2hxswa-484822a6.manus.computer
-
-Desenvolvido com ❤️ usando Go e Angular
-
-
-git config --global user.name "Daniel Ramos"
-git config --global user.email "devdsfr@gmail.com"
-git config --global core.editor "code --wait"

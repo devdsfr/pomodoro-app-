@@ -1,0 +1,117 @@
+<div class="task-list-container">
+  <div class="header">
+    <h2>Gerenciar Tarefas</h2>
+    <button class="add-btn" (click)="showAddForm = !showAddForm">
+      {{ showAddForm ? 'Cancelar' : 'Nova Tarefa' }}
+    </button>
+  </div>
+
+  <!-- Formulário para adicionar nova tarefa -->
+  <div class="add-form" *ngIf="showAddForm">
+    <div class="form-group">
+      <input 
+        type="text" 
+        [(ngModel)]="newTask.titulo" 
+        placeholder="Título da tarefa"
+        class="form-input">
+    </div>
+    <div class="form-group">
+      <textarea 
+        [(ngModel)]="newTask.descricao" 
+        placeholder="Descrição (opcional)"
+        class="form-textarea"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="save-btn" (click)="addTask()">Salvar</button>
+      <button class="cancel-btn" (click)="showAddForm = false">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Lista de tarefas pendentes -->
+  <div class="tasks-section">
+    <h3>Tarefas Pendentes ({{ getPendingTasks().length }})</h3>
+    <div class="tasks-list">
+      <div 
+        class="task-item pending" 
+        *ngFor="let task of getPendingTasks()"
+        [class.editing]="editingTask?.id === task.id">
+        
+        <!-- Modo de visualização -->
+        <div class="task-view" *ngIf="editingTask?.id !== task.id">
+          <div class="task-content">
+            <div class="task-header">
+              <input 
+                type="checkbox" 
+                [checked]="task.concluida"
+                (change)="toggleTaskCompletion(task)"
+                class="task-checkbox">
+              <h4 class="task-title">{{ task.titulo }}</h4>
+            </div>
+            <p class="task-description" *ngIf="task.descricao">{{ task.descricao }}</p>
+            <small class="task-date" *ngIf="task.data_criacao">
+              Criada em: {{ task.data_criacao | date:'dd/MM/yyyy HH:mm' }}
+            </small>
+          </div>
+          <div class="task-actions">
+            <button class="edit-btn" (click)="editTask(task)">Editar</button>
+            <button class="delete-btn" (click)="deleteTask(task.id!)">Excluir</button>
+          </div>
+        </div>
+
+        <!-- Modo de edição -->
+        <div class="task-edit" *ngIf="editingTask?.id === task.id">
+          <div class="form-group">
+            <input 
+              type="text" 
+              [(ngModel)]="editingTask!.titulo" 
+              class="form-input">
+          </div>
+          <div class="form-group">
+            <textarea 
+              [(ngModel)]="editingTask!.descricao" 
+              class="form-textarea"></textarea>
+          </div>
+          <div class="form-actions">
+            <button class="save-btn" (click)="saveTask()">Salvar</button>
+            <button class="cancel-btn" (click)="cancelEdit()">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de tarefas concluídas -->
+  <div class="tasks-section" *ngIf="getCompletedTasks().length > 0">
+    <h3>Tarefas Concluídas ({{ getCompletedTasks().length }})</h3>
+    <div class="tasks-list">
+      <div 
+        class="task-item completed" 
+        *ngFor="let task of getCompletedTasks()">
+        <div class="task-view">
+          <div class="task-content">
+            <div class="task-header">
+              <input 
+                type="checkbox" 
+                [checked]="task.concluida"
+                (change)="toggleTaskCompletion(task)"
+                class="task-checkbox">
+              <h4 class="task-title">{{ task.titulo }}</h4>
+            </div>
+            <p class="task-description" *ngIf="task.descricao">{{ task.descricao }}</p>
+            <small class="task-date" *ngIf="task.data_criacao">
+              Criada em: {{ task.data_criacao | date:'dd/MM/yyyy HH:mm' }}
+            </small>
+          </div>
+          <div class="task-actions">
+            <button class="delete-btn" (click)="deleteTask(task.id!)">Excluir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensagem quando não há tarefas -->
+  <div class="empty-state" *ngIf="tasks.length === 0">
+    <p>Nenhuma tarefa cadastrada. Clique em "Nova Tarefa" para começar!</p>
+  </div>
+</div>

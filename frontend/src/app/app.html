@@ -1,0 +1,32 @@
+<div class="app-container">
+  <header class="app-header">
+    <h1>🍅 Pomodoro App</h1>
+    <nav class="app-nav">
+      <button 
+        class="nav-btn"
+        [class.active]="currentView === 'timer'"
+        (click)="setView('timer')">
+        Timer
+      </button>
+      <button 
+        class="nav-btn"
+        [class.active]="currentView === 'tasks'"
+        (click)="setView('tasks')">
+        Tarefas
+      </button>
+      <button 
+        class="nav-btn"
+        [class.active]="currentView === 'calendar'"
+        (click)="setView('calendar')">
+        Calendário
+      </button>
+    </nav>
+  </header>
+
+  <main class="app-main">
+    <app-pomodoro-timer *ngIf="currentView === 'timer'"></app-pomodoro-timer>
+    <app-task-list *ngIf="currentView === 'tasks'"></app-task-list>
+    <app-calendar *ngIf="currentView === 'calendar'"></app-calendar>
+  </main>
+</div>
+
